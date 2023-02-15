@@ -13,6 +13,6 @@ public class Enunciat {
         3.2. Mostra el log de GitHub, en concret la línia on es veuen les proves executades, per a demostrar que
              l'execució de proves sobre GitHub funciona correctament.
         3.3. Explica en què consisteix el concepte de Continuous Integration (CI) i quina relació té amb el que
-             acabes de fer en aquest exercici.
+             acabes de fer en aquest exercici. /
 */
 }
