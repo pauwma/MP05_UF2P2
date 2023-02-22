@@ -16,6 +16,8 @@ class HashTableTest {
 
         table.put("1", "42");
         assertEquals("\n bucket[1] = [1, 42]", table.toString());
+        assertEquals(0, table.count());
+        assertEquals(16, table.size());
     }
 
     // Inserir un element que no col·lisiona dins una taula no vuida (amb elements).
@@ -28,6 +30,8 @@ class HashTableTest {
         assertEquals("\n" +
                 " bucket[1] = [1, 42]\n" +
                 " bucket[5] = [5, 26]", table.toString());
+        assertEquals(2, table.count());
+        assertEquals(16, table.size());
     }
 
     // Inserir un element que col·lisiona dins una taula no vuida, que es col·locarà en 2a posició dins el mateix bucket.
@@ -273,5 +277,4 @@ class HashTableTest {
             table.drop("34");
         });
     }
-
 }
