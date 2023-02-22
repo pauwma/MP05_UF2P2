@@ -112,7 +112,7 @@ class HashTableTest {
         HashTable table = new HashTable();
         String valor = "42";
         table.put("1", valor);
-        assertEquals(table.get("1"),valor);
+        assertEquals(valor,table.get("1"));
     }
 
     // Obtenir un element que col·lisiona dins una taula (1a posició dins el mateix bucket).
@@ -122,7 +122,7 @@ class HashTableTest {
         String valor = "42";
         table.put("1",valor);
         table.put("12", "43");
-        assertEquals(table.get("1"),valor);
+        assertEquals(valor,table.get("1"));
     }
 
     // Obtenir un element que col·lisiona dins una taula (2a posició dins el mateix bucket).
@@ -132,7 +132,7 @@ class HashTableTest {
         String valor = "24";
         table.put("1", "42");
         table.put("12", valor);
-        assertEquals(table.get("12"),valor);
+        assertEquals(valor,table.get("12"));
     }
 
     // Obtenir un element que col·lisiona dins una taula (3a posició dins el mateix bucket).
@@ -143,7 +143,7 @@ class HashTableTest {
         table.put("1", "42");
         table.put("12", "23");
         table.put("23", valor);
-        assertEquals(table.get("23"),valor);
+        assertEquals(valor,table.get("23"));
     }
 
     // Obtenir un elements que no existeix perquè la seva posició està buida (no hi ha cap element dins el bucket).
@@ -151,7 +151,7 @@ class HashTableTest {
     void get5() {
         HashTable table = new HashTable();
         table.get("1");
-        assertEquals(table.get("2"),null);
+        assertEquals(null,table.get("2"));
     }
 
     // Obtenir un elements que no existeix, tot i que la seva posició està ocupada per un altre que no col·lisiona.
@@ -166,6 +166,7 @@ class HashTableTest {
     }
 
     // Obtenir un elements que no existeix, tot i que la seva posició està ocupada per 3 elements col·lisionats.
+    @Test
     void get7() {
         HashTable table = new HashTable();
         table.put("1", "42");
@@ -175,4 +176,102 @@ class HashTableTest {
             table.get("34");
         });
     }
+
+    // Esborrar un element que no col·lisiona dins una taula.
+    @Test
+    void drop1() {
+        HashTable table = new HashTable();
+        table.put("1", "42");
+        table.put("12", "24");
+        table.put("23", "12");
+        table.put("2","15");
+
+        table.drop("2");
+        assertEquals("\n bucket[1] = [1, 42] -> [12, 24] -> [23, 12]", table.toString());
+    }
+
+    // Esborrar un element que si col·lisiona dins una taula (1a posició dins el mateix bucket).
+    @Test
+    void drop2() {
+        HashTable table = new HashTable();
+        table.put("1", "42");
+        table.put("12", "24");
+        table.put("23", "12");
+        table.put("2","15");
+
+        table.drop("1");
+        assertEquals("\n bucket[2] = [2, 15]", table.toString());
+    }
+
+    // Esborrar un element que si col·lisiona dins una taula (2a posició dins el mateix bucket).
+    @Test
+    void drop3() {
+        HashTable table = new HashTable();
+        table.put("1", "42");
+        table.put("12", "24");
+        table.put("23", "12");
+        table.put("2","15");
+
+        table.drop("12");
+        assertEquals("\n" +
+                " bucket[1] = [1, 42] -> [23, 12]\n" +
+                " bucket[2] = [2, 15]", table.toString());
+    }
+
+    // Esborrar un element que si col·lisiona dins una taula (3a posició dins el mateix bucket).
+    @Test
+    void drop4() {
+        HashTable table = new HashTable();
+        table.put("1", "42");
+        table.put("12", "24");
+        table.put("23", "12");
+        table.put("2","15");
+
+        table.drop("23");
+        assertEquals("\n" +
+                " bucket[1] = [1, 42] -> [12, 24]\n" +
+                " bucket[2] = [2, 15]", table.toString());
+    }
+
+    // Eliminar un elements que no existeix perquè la seva posició està buida (no hi ha cap element dins el bucket).
+    @Test
+    void drop5() {
+        HashTable table = new HashTable();
+        table.put("1", "42");
+        table.put("12", "24");
+        table.put("23", "12");
+        table.put("2","15");
+
+        table.drop("3");
+        assertEquals("\n" +
+                " bucket[1] = [1, 42] -> [12, 24] -> [23, 12]\n" +
+                " bucket[2] = [2, 15]", table.toString());
+    }
+
+    // Eliminar un elements que no existeix, tot i que la seva posició està ocupada per un altre que no col·lisiona.
+    @Test
+    void drop6() {
+        HashTable table = new HashTable();
+        table.put("1", "42");
+        table.put("12", "24");
+        table.put("23", "12");
+        table.put("2","15");
+        assertThrows(NullPointerException.class, () -> {
+            table.drop("13");
+        });
+    }
+
+    // Eliminar un elements que no existeix, tot i que la seva posició està ocupada per 3 elements col·lisionats.
+    @Test
+    void drop7() {
+        HashTable table = new HashTable();
+        table.put("1", "42");
+        table.put("12", "24");
+        table.put("23", "12");
+        table.put("2","15");
+        assertThrows(NullPointerException.class, () -> {
+            table.drop("34");
+        });
+    }
+
 }
