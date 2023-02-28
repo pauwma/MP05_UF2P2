@@ -1,10 +1,8 @@
 package ex3;
 
-import ex2.HashTable;
+import ex3.HashTable;
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -13,7 +11,7 @@ class HashTableTest {
     // Inserir un element que no col·lisiona dins una taula vuida (sense elements).
     @Test
     void put1() {
-        ex2.HashTable table = new ex2.HashTable();
+        HashTable table = new HashTable();
 
         table.put("1", "42");
         assertEquals("\n bucket[1] = [1, 42]", table.toString());
@@ -24,7 +22,7 @@ class HashTableTest {
     // Inserir un element que no col·lisiona dins una taula no vuida (amb elements).
     @Test
     void put2() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
 
         table.put("1", "42");
         table.put("5", "26");
@@ -38,7 +36,7 @@ class HashTableTest {
     // Inserir un element que col·lisiona dins una taula no vuida, que es col·locarà en 2a posició dins el mateix bucket.
     @Test
     void put3() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
 
         table.put("1", "42");
         String col1 = String.valueOf(table.getCollisionsForKey("1",1));
@@ -52,7 +50,7 @@ class HashTableTest {
     // Inserir un element que col·lisiona dins una taula no vuida, que es col·locarà en 3a posició dins el mateix bucket.
     @Test
     void put4() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
 
         table.put("1", "42");
         ArrayList<String> cols = table.getCollisionsForKey("1",2);
@@ -68,7 +66,7 @@ class HashTableTest {
     // Inserir un elements que ja existeix (update) sobre un element que no col·lisiona dins una taula no vuida.
     @Test
     void put5() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
 
         table.put("1", "42");
         table.put("2", "24");
@@ -83,7 +81,7 @@ class HashTableTest {
     // Inserir un elements que ja existeix (update) sobre un element que si col·lisiona (1a posició) dins una taula no vuida.
     @Test
     void put6() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
 
         table.put("1", "42");
         table.put("12", "24");
@@ -97,7 +95,7 @@ class HashTableTest {
     // Inserir un elements que ja existeix (update) sobre un element que si col·lisiona (2a posició) dins una taula no vuida.
     @Test
     void put7() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
 
         table.put("1", "42");
         table.put("12", "24");
@@ -111,7 +109,7 @@ class HashTableTest {
     // Inserir un elements que ja existeix (update) sobre un element que si col·lisiona (3a posició) dins una taula no vuida.
     @Test
     void put8() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
 
         table.put("1", "42");
         table.put("12", "24");
@@ -126,7 +124,7 @@ class HashTableTest {
     // Obtenir un element que no col·lisiona dins una taula vuida.
     @Test
     void get1() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
         String valor = "42";
         table.put("1", valor);
         assertEquals(valor,table.get("1"));
@@ -137,7 +135,7 @@ class HashTableTest {
     // Obtenir un element que col·lisiona dins una taula (1a posició dins el mateix bucket).
     @Test
     void get2() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
         String valor = "42";
         table.put("1",valor);
         table.put("12", "43");
@@ -149,7 +147,7 @@ class HashTableTest {
     // Obtenir un element que col·lisiona dins una taula (2a posició dins el mateix bucket).
     @Test
     void get3() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
         String valor = "24";
         table.put("1", "42");
         table.put("12", valor);
@@ -161,7 +159,7 @@ class HashTableTest {
     // Obtenir un element que col·lisiona dins una taula (3a posició dins el mateix bucket).
     @Test
     void get4() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
         String valor = "12";
         table.put("1", "42");
         table.put("12", "23");
@@ -174,7 +172,7 @@ class HashTableTest {
     // Obtenir un elements que no existeix perquè la seva posició està buida (no hi ha cap element dins el bucket).
     @Test
     void get5() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
         table.get("1");
         assertEquals(null,table.get("2"));
         assertEquals(0, table.count());
@@ -184,7 +182,7 @@ class HashTableTest {
     // Obtenir un elements que no existeix, tot i que la seva posició està ocupada per un altre que no col·lisiona.
     @Test
     void get6() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
         table.put("1", "42");
         table.put("12", "24");
         assertThrows(NullPointerException.class, () -> {
@@ -197,7 +195,7 @@ class HashTableTest {
     // Obtenir un elements que no existeix, tot i que la seva posició està ocupada per 3 elements col·lisionats.
     @Test
     void get7() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
         table.put("1", "42");
         table.put("12", "24");
         table.put("23", "12");
@@ -211,7 +209,7 @@ class HashTableTest {
     // Esborrar un element que no col·lisiona dins una taula.
     @Test
     void drop1() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
         table.put("1", "42");
         table.put("12", "24");
         table.put("23", "12");
@@ -226,7 +224,7 @@ class HashTableTest {
     // Esborrar un element que si col·lisiona dins una taula (1a posició dins el mateix bucket).
     @Test
     void drop2() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
         table.put("1", "42");
         table.put("12", "24");
         table.put("23", "12");
@@ -241,7 +239,7 @@ class HashTableTest {
     // Esborrar un element que si col·lisiona dins una taula (2a posició dins el mateix bucket).
     @Test
     void drop3() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
         table.put("1", "42");
         table.put("12", "24");
         table.put("23", "12");
@@ -258,7 +256,7 @@ class HashTableTest {
     // Esborrar un element que si col·lisiona dins una taula (3a posició dins el mateix bucket).
     @Test
     void drop4() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
         table.put("1", "42");
         table.put("12", "24");
         table.put("23", "12");
@@ -275,7 +273,7 @@ class HashTableTest {
     // Eliminar un elements que no existeix perquè la seva posició està buida (no hi ha cap element dins el bucket).
     @Test
     void drop5() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
         table.put("1", "42");
         table.put("12", "24");
         table.put("23", "12");
@@ -292,7 +290,7 @@ class HashTableTest {
     // Eliminar un elements que no existeix, tot i que la seva posició està ocupada per un altre que no col·lisiona.
     @Test
     void drop6() {
-        ex2.HashTable table = new ex2.HashTable();
+        ex3.HashTable table = new ex3.HashTable();
         table.put("1", "42");
         table.put("12", "24");
         table.put("23", "12");
@@ -307,7 +305,7 @@ class HashTableTest {
     // Eliminar un elements que no existeix, tot i que la seva posició està ocupada per 3 elements col·lisionats.
     @Test
     void drop7() {
-        ex2.HashTable table = new HashTable();
+        HashTable table = new HashTable();
         table.put("1", "42");
         table.put("12", "24");
         table.put("23", "12");

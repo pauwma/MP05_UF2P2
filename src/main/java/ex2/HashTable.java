@@ -36,15 +36,26 @@ public class HashTable {
         }
         else {
             HashEntry temp = entries[hash];
-            while(temp.next != null)
+            while(temp != null) {
+                if(temp.key.equals(key)) {
+                    temp.value = value; // Actualiza el valor asociado con la clave si ya existe
+                    return;
+                }
                 temp = temp.next;
+            }
 
+            // Si la clave no existe, agregue un nuevo elemento al final de la lista
+            temp = entries[hash];
+            while(temp.next != null) {
+                temp = temp.next;
+            }
             temp.next = hashEntry;
             hashEntry.prev = temp;
         }
 
         ITEMS++;
     }
+
 
     /**
      * Permet recuperar un element dins la taula.
@@ -72,20 +83,36 @@ public class HashTable {
     public void drop(String key) {
         int hash = getHash(key);
         if(entries[hash] != null) {
-
             HashEntry temp = entries[hash];
-            while( !temp.key.equals(key))
+            while(temp != null && !temp.key.equals(key)) {
                 temp = temp.next;
+            }
 
-            if(temp.prev == null) entries[hash] = null;             //esborrar element únic (no col·lissió)
-            else{
-                if(temp.next != null) temp.next.prev = temp.prev;   //esborrem temp, per tant actualitzem l'anterior al següent
-                temp.prev.next = temp.next;                         //esborrem temp, per tant actualitzem el següent de l'anterior
+            // ? Solución de excepciones al eliminar una key no existente.
+            /*
+            if(temp == null) {
+                return; // La clave no existe en el mapa
+            }
+            */
+
+            if(temp.prev == null) { // Es el primer nodo de la lista de colisiones
+                if(temp.next != null) { // Hay más nodos en la lista de colisiones
+                    entries[hash] = temp.next; // Actualizar entries[hash] para apuntar al siguiente nodo
+                    temp.next.prev = null; // Actualizar el puntero prev del siguiente nodo
+                } else { // Es el único nodo de la lista de colisiones
+                    entries[hash] = null; // Actualizar entries[hash] para que sea nulo
+                }
+            } else { // No es el primer nodo de la lista de colisiones
+                if(temp.next != null) {
+                    temp.next.prev = temp.prev;
+                }
+                temp.prev.next = temp.next;
             }
         }
 
         ITEMS--;
     }
+
 
     private int getHash(String key) {
         // piggy backing on java string

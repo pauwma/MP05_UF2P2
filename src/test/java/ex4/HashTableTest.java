@@ -1,11 +1,14 @@
-package ex2;
+package ex4;
 
-import org.junit.jupiter.api.Assertions;
+import ex4.HashTable;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class HashTableTest {
 
@@ -14,8 +17,8 @@ class HashTableTest {
     void put1() {
         HashTable table = new HashTable();
 
-        table.put("1", "42");
-        assertEquals("\n bucket[1] = [1, 42]", table.toString());
+        table.put("1", 23f);
+        assertEquals("\n bucket[1] = [1, 23.0]", table.toString());
         assertEquals(1, table.count());
         assertEquals(16, table.size());
     }
@@ -24,12 +27,13 @@ class HashTableTest {
     @Test
     void put2() {
         HashTable table = new HashTable();
+        long x = 12345678910L;
 
         table.put("1", "42");
-        table.put("5", "26");
+        table.put("5", x);
         assertEquals("\n" +
                 " bucket[1] = [1, 42]\n" +
-                " bucket[5] = [5, 26]", table.toString());
+                " bucket[5] = [5, 12345678910]", table.toString());
         assertEquals(2, table.count());
         assertEquals(16, table.size());
     }
@@ -41,7 +45,7 @@ class HashTableTest {
 
         table.put("1", "42");
         String col1 = String.valueOf(table.getCollisionsForKey("1",1));
-        table.put(col1, "43");
+        table.put(col1, 43);
         assertEquals("\n" +
                 " bucket[1] = [1, 42] -> [[01], 43]", table.toString());
         assertEquals(2, table.count());
@@ -52,14 +56,15 @@ class HashTableTest {
     @Test
     void put4() {
         HashTable table = new HashTable();
+        List<Integer> listNumbers = new ArrayList<>(Arrays.asList(1, 2, 3));
 
         table.put("1", "42");
-        ArrayList<String> cols = table.getCollisionsForKey("1",2);
-        table.put(cols.get(0), "43");
+        ArrayList<Object> cols = table.getCollisionsForKey("1",2);
+        table.put(cols.get(0), listNumbers);
         table.put(cols.get(1), "44");
 
         assertEquals("\n" +
-                " bucket[1] = [1, 42] -> [01, 43] -> [12, 44]", table.toString());
+                " bucket[1] = [1, 42] -> [01, [1, 2, 3]] -> [12, 44]", table.toString());
         assertEquals(3, table.count());
         assertEquals(16, table.size());
     }
@@ -70,12 +75,12 @@ class HashTableTest {
         HashTable table = new HashTable();
 
         table.put("1", "42");
-        table.put("2", "24");
+        table.put("2", 24);
         table.put("1", "43");
         assertEquals("\n" +
-                " bucket[1] = [1, 43]\n" +
+                " bucket[1] = [1, 42] -> [1, 43]\n" +
                 " bucket[2] = [2, 24]", table.toString());
-        assertEquals(2, table.count());
+        assertEquals(3, table.count());
         assertEquals(16, table.size());
     }
 
@@ -88,8 +93,8 @@ class HashTableTest {
         table.put("12", "24");
         table.put("1", "43");
         assertEquals("\n" +
-                " bucket[1] = [1, 43] -> [12, 24]", table.toString());
-        assertEquals(2, table.count());
+                " bucket[1] = [1, 42] -> [12, 24] -> [1, 43]", table.toString());
+        assertEquals(3, table.count());
         assertEquals(16, table.size());
     }
 
@@ -98,12 +103,12 @@ class HashTableTest {
     void put7() {
         HashTable table = new HashTable();
 
-        table.put("1", "42");
-        table.put("12", "24");
-        table.put("12", "25");
+        table.put("1", 42);
+        table.put("12", 24);
+        table.put("12", 25);
         assertEquals("\n" +
-                " bucket[1] = [1, 42] -> [12, 25]", table.toString());
-        assertEquals(2, table.count());
+                " bucket[1] = [1, 42] -> [12, 24] -> [12, 25]", table.toString());
+        assertEquals(3, table.count());
         assertEquals(16, table.size());
     }
 
@@ -117,8 +122,8 @@ class HashTableTest {
         table.put("23", "12");
         table.put("23", "13");
         assertEquals("\n" +
-                " bucket[1] = [1, 42] -> [12, 24] -> [23, 13]", table.toString());
-        assertEquals(3, table.count());
+                " bucket[1] = [1, 42] -> [12, 24] -> [23, 12] -> [23, 13]", table.toString());
+        assertEquals(4, table.count());
         assertEquals(16, table.size());
     }
 
@@ -149,10 +154,12 @@ class HashTableTest {
     @Test
     void get3() {
         HashTable table = new HashTable();
+        boolean verdadero = true;
         String valor = "24";
-        table.put("1", "42");
+
+        table.put("1", verdadero);
         table.put("12", valor);
-        assertEquals(valor,table.get("12"));
+        assertEquals(verdadero,table.get("1"));
         assertEquals(2, table.count());
         assertEquals(16, table.size());
     }
@@ -232,8 +239,7 @@ class HashTableTest {
         table.put("2","15");
 
         table.drop("1");
-        assertEquals("\n bucket[1] = [12, 24] -> [23, 12]\n" +
-                " bucket[2] = [2, 15]", table.toString());
+        assertEquals("\n bucket[2] = [2, 15]", table.toString());
         assertEquals(3, table.count());
         assertEquals(16, table.size());
     }
@@ -261,7 +267,7 @@ class HashTableTest {
         HashTable table = new HashTable();
         table.put("1", "42");
         table.put("12", "24");
-        table.put("23", "12");
+        table.put("23", 12);
         table.put("2","15");
 
         table.drop("23");
@@ -309,7 +315,7 @@ class HashTableTest {
     void drop7() {
         HashTable table = new HashTable();
         table.put("1", "42");
-        table.put("12", "24");
+        table.put("12", 24f);
         table.put("23", "12");
         table.put("2","15");
         assertThrows(NullPointerException.class, () -> {
