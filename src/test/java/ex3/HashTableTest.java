@@ -11,7 +11,7 @@ class HashTableTest {
     // Inserir un element que no col·lisiona dins una taula vuida (sense elements).
     @Test
     void put1() {
-        HashTable table = new HashTable();
+        ex3.HashTable table = new ex3.HashTable();
 
         table.put("1", "42");
         assertEquals("\n bucket[1] = [1, 42]", table.toString());
@@ -72,9 +72,9 @@ class HashTableTest {
         table.put("2", "24");
         table.put("1", "43");
         assertEquals("\n" +
-                " bucket[1] = [1, 42] -> [1, 43]\n" +
+                " bucket[1] = [1, 43]\n" +
                 " bucket[2] = [2, 24]", table.toString());
-        assertEquals(3, table.count());
+        assertEquals(2, table.count());
         assertEquals(16, table.size());
     }
 
@@ -87,8 +87,8 @@ class HashTableTest {
         table.put("12", "24");
         table.put("1", "43");
         assertEquals("\n" +
-                " bucket[1] = [1, 42] -> [12, 24] -> [1, 43]", table.toString());
-        assertEquals(3, table.count());
+                " bucket[1] = [1, 43] -> [12, 24]", table.toString());
+        assertEquals(2, table.count());
         assertEquals(16, table.size());
     }
 
@@ -101,8 +101,8 @@ class HashTableTest {
         table.put("12", "24");
         table.put("12", "25");
         assertEquals("\n" +
-                " bucket[1] = [1, 42] -> [12, 24] -> [12, 25]", table.toString());
-        assertEquals(3, table.count());
+                " bucket[1] = [1, 42] -> [12, 25]", table.toString());
+        assertEquals(2, table.count());
         assertEquals(16, table.size());
     }
 
@@ -116,8 +116,8 @@ class HashTableTest {
         table.put("23", "12");
         table.put("23", "13");
         assertEquals("\n" +
-                " bucket[1] = [1, 42] -> [12, 24] -> [23, 12] -> [23, 13]", table.toString());
-        assertEquals(4, table.count());
+                " bucket[1] = [1, 42] -> [12, 24] -> [23, 13]", table.toString());
+        assertEquals(3, table.count());
         assertEquals(16, table.size());
     }
 
@@ -231,7 +231,9 @@ class HashTableTest {
         table.put("2","15");
 
         table.drop("1");
-        assertEquals("\n bucket[2] = [2, 15]", table.toString());
+        assertEquals("\n" +
+                " bucket[1] = [12, 24] -> [23, 12]\n" +
+                " bucket[2] = [2, 15]", table.toString());
         assertEquals(3, table.count());
         assertEquals(16, table.size());
     }
@@ -305,7 +307,7 @@ class HashTableTest {
     // Eliminar un elements que no existeix, tot i que la seva posició està ocupada per 3 elements col·lisionats.
     @Test
     void drop7() {
-        HashTable table = new HashTable();
+        ex3.HashTable table = new ex3.HashTable();
         table.put("1", "42");
         table.put("12", "24");
         table.put("23", "12");

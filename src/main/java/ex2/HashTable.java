@@ -53,6 +53,7 @@ public class HashTable {
             hashEntry.prev = temp;
         }
 
+        // ? Suma del nuevo item
         ITEMS++;
     }
 
@@ -110,6 +111,7 @@ public class HashTable {
             }
         }
 
+        // ? Resta del drop del item
         ITEMS--;
     }
 

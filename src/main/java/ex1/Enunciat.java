@@ -10,8 +10,6 @@ public class Enunciat {
 
     3. Grava en vídeo el següent:
         3.1. Mostra les modificacions que has fet el projecte per a poder fer servir Maven.
-            - Primeramente he añadido el soporte de Framework en el proyecto y he añadido el de Maven, después he añadido las dependencias necesarias.
-            - Seguidamente he implementado los tests de la clase de HashTable
 
         3.2. Mostra el log de GitHub, en concret la línia on es veuen les proves executades, per a demostrar que
              l'execució de proves sobre GitHub funciona correctament.

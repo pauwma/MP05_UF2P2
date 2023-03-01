@@ -23,6 +23,7 @@ public class HashTable {
      * @param key La clau de l'element a afegir.
      * @param value El propi element que es vol afegir.
      */
+
     public void put(String key, String value) {
         int hash = getHash(key);
         final HashEntry hashEntry = new HashEntry(key, value);
@@ -32,13 +33,24 @@ public class HashTable {
         }
         else {
             HashEntry temp = entries[hash];
-            while(temp.next != null)
+            while(temp != null) {
+                if(temp.key.equals(key)) {
+                    temp.value = value; // Actualiza el valor asociado con la clave si ya existe
+                    return;
+                }
                 temp = temp.next;
+            }
 
+            // Si la clave no existe, agregue un nuevo elemento al final de la lista
+            temp = entries[hash];
+            while(temp.next != null) {
+                temp = temp.next;
+            }
             temp.next = hashEntry;
             hashEntry.prev = temp;
         }
 
+        // ? Suma del nuevo item
         ITEMS++;
     }
 
@@ -65,21 +77,38 @@ public class HashTable {
      * Permet esborrar un element dins de la taula.
      * @param key La clau de l'element a trobar.
      */
+
     public void drop(String key) {
         int hash = getHash(key);
         if(entries[hash] != null) {
-
             HashEntry temp = entries[hash];
-            while( !temp.key.equals(key))
+            while(temp != null && !temp.key.equals(key)) {
                 temp = temp.next;
+            }
 
-            if(temp.prev == null) entries[hash] = null;             //esborrar element únic (no col·lissió)
-            else{
-                if(temp.next != null) temp.next.prev = temp.prev;   //esborrem temp, per tant actualitzem l'anterior al següent
-                temp.prev.next = temp.next;                         //esborrem temp, per tant actualitzem el següent de l'anterior
+            // ? Solución de excepciones al eliminar una key no existente.
+            /*
+            if(temp == null) {
+                return; // La clave no existe en el mapa
+            }
+            */
+
+            if(temp.prev == null) { // Es el primer nodo de la lista de colisiones
+                if(temp.next != null) { // Hay más nodos en la lista de colisiones
+                    entries[hash] = temp.next; // Actualizar entries[hash] para apuntar al siguiente nodo
+                    temp.next.prev = null; // Actualizar el puntero prev del siguiente nodo
+                } else { // Es el único nodo de la lista de colisiones
+                    entries[hash] = null; // Actualizar entries[hash] para que sea nulo
+                }
+            } else { // No es el primer nodo de la lista de colisiones
+                if(temp.next != null) {
+                    temp.next.prev = temp.prev;
+                }
+                temp.prev.next = temp.next;
             }
         }
 
+        // ? Resta del drop del item
         ITEMS--;
     }
 
@@ -87,27 +116,6 @@ public class HashTable {
         // piggy backing on java string
         // hashcode implementation.
         return key.hashCode() % SIZE;
-    }
-
-    private class HashEntry {
-        String key;
-        String value;
-
-        // Linked list of same hash entries.
-        HashEntry next;
-        HashEntry prev;
-
-        public HashEntry(String key, String value) {
-            this.key = key;
-            this.value = value;
-            this.next = null;
-            this.prev = null;
-        }
-
-        @Override
-        public String toString() {
-            return "[" + key + ", " + value + "]";
-        }
     }
 
     @Override
